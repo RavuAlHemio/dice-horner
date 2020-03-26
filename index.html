@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Dice and the Horner Scheme</title>
+  <script type="text/javascript" src="dice-horner.js"></script>
+  <script type="text/javascript">
+    DiceHorner.init();
+  </script>
+</head>
+
+<body>
+  <h1>Dice and the Horner Scheme</h1>
+  <p>
+    This page assists in using a die to generate uniformly distributed
+    random numbers by mapping every throw to a digit in the positional
+    notation of base <em>b</em> where <em>b</em> is equal to the
+    number of sides of the die.
+  </p>
+  <p>
+    For example, the die numbered 1 to 6 is mapped to the digits
+    0<sub>6</sub> to 5<sub>6</sub>. Throwing the die three times can
+    yield numbers from 000<sub>6</sub> = 0<sub>10</sub> (1, 1, 1) to
+    555<sub>6</sub> = 215<sub>10</sub> (6, 6, 6). If throwing the die
+    three times yields the numbers 1, 4 and 2, this is interpreted as
+    the number 031<sub>6</sub> = 19<sub>10</sub>.
+  </p>
+  <p>
+    Your die is numbered
+    <input type="number" id="die-min" value="1" min="0" step="1" />
+    to
+    <input type="number" id="die-max" value="6" min="0" step="1" />.
+  </p>
+  <p>
+    If you throw it
+    <input type="number" id="die-throw-count" value="1" min="1" step="1" />
+    time(s), you will obtain a value between 0 and
+    <span id="die-throw-max-val">?</span>.
+  </p>
+  <p>
+    The results of your throws are
+    <input type="text" id="die-throw-results" placeholder="1 3 6 1" pattern="^\s*(?:[0-9]+(?:\s+[0-9]+)*\s*)?$" />.
+  </p>
+  <p>
+    The resulting value is <span id="die-final-result"></span>.
+  </p>
+</body>
+
+</html>
