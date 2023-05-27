@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Why the Horner scheme with dice?</title>
+  <style type="text/css">
+    table.distrib { border-collapse: collapse; }
+    table.distrib th, table.distrib td { border: 1px solid #999; text-align: center; padding: 0.2em 0.4em; }
+  </style>
+</head>
+
+<body>
+  <h1>Why the Horner scheme with dice?</h1>
+  <h2>Why not just add up the dots?</h2>
+  <p>
+    This is often the first idea on how to generate random numbers.
+    Unfortunately, we quickly see a bias:
+  </p>
+  <table class="distrib">
+    <tr>
+      <th></th>
+      <th colspan="6">Second throw</th>
+    </tr>
+    <tr>
+      <th>First throw</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+      <th>6</th>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>3</td>
+      <td>4</td>
+      <td>5</td>
+      <td>6</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>4</td>
+      <td>5</td>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>5</td>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+      <td>9</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+      <td>9</td>
+      <td>10</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>7</td>
+      <td>8</td>
+      <td>9</td>
+      <td>10</td>
+      <td>11</td>
+      <td>12</td>
+    </tr>
+  </table>
+  <p>
+    More accurately, we obtain the following distribution:
+  </p>
+  <table class="distrib">
+    <tr>
+      <th>Sum</th>
+      <th>Relative Frequency</th>
+    </tr>
+    <tr><td>2</td><td>1</td></tr>
+    <tr><td>3</td><td>2</td></tr>
+    <tr><td>4</td><td>3</td></tr>
+    <tr><td>5</td><td>4</td></tr>
+    <tr><td>6</td><td>5</td></tr>
+    <tr><td>7</td><td>6</td></tr>
+    <tr><td>8</td><td>5</td></tr>
+    <tr><td>9</td><td>4</td></tr>
+    <tr><td>10</td><td>3</td></tr>
+    <tr><td>11</td><td>2</td></tr>
+    <tr><td>12</td><td>1</td></tr>
+  </table>
+  <p>
+    This means that the value 7 is six times more likely to appear than
+    the value 2. That is not a uniform distribution.
+  </p>
+  <h2>Why not just juxtapose/concatenate the digits?</h2>
+  <p>
+    That does seem a bit fairer. However, the die probably only has
+    sides with at least 1 and at most 6 dots, which means the digits 0,
+    7, 8 and 9 will never occur.
+  </p>
+  <h2>So what does the Horner scheme do?</h2>
+  <p>
+    It takes the juxtaposition/concatenation idea and modifies it to
+    make sure that there are no &#8220;impossible digits&#8221;.
+  </p>
+  <p>
+    A juxtaposition/concatenation of a digit to the end a number is
+    the same as:
+    <ul>
+      <li>multiplying the number by 10</li>
+      <li>adding the digit to the result of the multiplication</li>
+    </ul>
+  </p>
+  <p>
+    Why the number 10? The reason is that we have ten different options
+    that a digit can be (0, 1, 2, 3, 4, 5, 6, 7, 8, and 9), so to ensure
+    that the new digit is independent of all the digits in the previous
+    number, we must &#8220;make space&#8221; for the new digit by
+    multiplying the previous number by the number of options that the
+    new digit can have.
+  </p>
+  <p>
+    And that&#8217;s the whole trick, really. Since a six-sided die only
+    has six options, we don&#8217;t multiply by ten before adding the
+    next roll, but just by six. We also have to map the die dots (1 dot to
+    6 dots) to the digit range of 0 to 5, since 6 is technically already
+    the next &#8220;rank&#8221;. (If this feels puzzling, consider a
+    ten-sided die with 1 to 10 dots &#8211; 10 is obviously a special
+    number of dots unlike the others because it has two digits.)
+  </p>
+  <p>
+    So all that happens is:
+    <ol>
+      <li>
+        Map the dots on the die to the numbers 0 to <em>n</em> where
+        <em>n</em> is one less than the total number of sides on the die.
+      </li>
+      <li>Start with the number 0.</li>
+      <li>As often as necessary:</li>
+      <ol>
+        <li>Multiply the number by 10.</li>
+        <li>Roll the die.</li>
+        <li>
+          Add the value corresponding to the dots on the top side of the
+          die (see step 1).
+        </li>
+      </ol>
+    </ol>
+  </p>
+</body>
+
+</html>
